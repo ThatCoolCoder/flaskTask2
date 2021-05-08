@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Flask Task 2</title>
+    </head>
+
+    <body>
+        <h1>Flask task</h1>
+        <div id="output"></div>
+        <input id="message" style="width: 300px" placeholder="message">
+        <button onclick="send()">Send</button>
+        <br>
+        <input id="name" placeholder="name">
+    </body>
+
+    <script>
+        const nameInput = document.getElementById('name');
+        const messageInput = document.getElementById('message');
+        const outputDiv = document.getElementById('output');
+
+        function send() {
+            var data = {message : messageInput.value, name : nameInput.value};
+            messageInput.value = '';
+            fetch('send/', {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(data)
+            });
+        }
+
+        setInterval(() => {
+            var messages = await fetch('get/', {method : 'POST'});
+            console.log(messages);
+        }, 1000);
+    </script>
+</html>
