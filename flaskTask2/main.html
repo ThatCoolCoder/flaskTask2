@@ -19,6 +19,12 @@
         const messageInput = document.getElementById('message');
         const outputDiv = document.getElementById('output');
 
+        messageInput.addEventListener('keyup', event => {
+            if (event.keyCode == 13) {
+                send();
+            }
+        })
+
         async function send() {
             var data = {content : messageInput.value, sender : nameInput.value || 'anonymous'};
             messageInput.value = '';
