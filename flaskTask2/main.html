@@ -6,6 +6,8 @@
     <body>
         <h1>Flask task</h1>
         <div id="output"></div>
+        <br>
+        <br>
         <input id="message" style="width: 300px" placeholder="message">
         <button onclick="send()">Send</button>
         <br>
@@ -17,8 +19,8 @@
         const messageInput = document.getElementById('message');
         const outputDiv = document.getElementById('output');
 
-        function send() {
-            var data = {message : messageInput.value, name : nameInput.value};
+        async function send() {
+            var data = {content : messageInput.value, sender : nameInput.value || 'anonymous'};
             messageInput.value = '';
             fetch('send/', {
                 method: 'POST',
@@ -34,9 +36,17 @@
             });
         }
 
-        setInterval(() => {
-            var messages = await fetch('get/', {method : 'POST'});
-            console.log(messages);
+        setInterval(async () => {
+            fetch('get/', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(messages => {
+                outputDiv.innerHTML = '';
+                messages.forEach(message => {
+                    outputDiv.innerText += `${message.sender}: ${message.content}\n`;
+                });
+            })
         }, 1000);
     </script>
 </html>
